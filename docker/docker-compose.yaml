@@ -1,0 +1,7 @@
+services:
+  docker_test_1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"

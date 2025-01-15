@@ -1,0 +1,2 @@
+- add "dockerTest.jar" file also
+- you will find it in "<solution folder>/build/libs/dockerTest.jar"
