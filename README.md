@@ -2,13 +2,14 @@
 - Java version 22
 - Gradle 8
 - Spring 3.4.1
-- Thymleaf
+- Thymleaf 3.4.1
 
 
 # About
-- Will be a Docker based Application
-- Will have a load balancer
-- Will have 2 application server
+- Docker based Application
+- With Load Balancer
+- With 2 application server
+- Add 1 more application server
 - Will have a Database
 - Will include Spring Security
 - Will have shared volume for database

@@ -1,7 +1,46 @@
+networks:
+  app_network:
+    driver: bridge
+
 services:
+
   docker_test_1:
+    container_name: docker_test_1
     build:
       context: .
       dockerfile: Dockerfile
+    networks:
+      - app_network
+
+  docker_test_2:
+    container_name: docker_test_2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+
+  haproxy:
+    build:
+      context: ./haproxy
+    container_name: haproxy
     ports:
       - "80:80"
+      - "443:443"
+    depends_on:
+      - docker_test_1
+      - docker_test_2
+    networks:
+      - app_network
+
+  #ubuntu:
+  #  image: ubuntu:latest
+  #  container_name: ubuntu
+  #  command: [ "bash" ]  # Start the container with Bash
+  #  stdin_open: true   # Keep the container open for interaction
+  #  tty: true          # Allocate a pseudo-TTY
+  #  networks:
+  #    - app_network
+  ## apt-get update && apt-get install -y curl && curl --version
+
+
