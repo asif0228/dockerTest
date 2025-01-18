@@ -20,6 +20,14 @@ services:
     networks:
       - app_network
 
+#  docker_test_3:
+#    container_name: docker_test_3
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    networks:
+#      - app_network
+
   haproxy:
     build:
       context: ./haproxy
