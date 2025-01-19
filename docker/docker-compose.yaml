@@ -2,6 +2,9 @@ networks:
   app_network:
     driver: bridge
 
+volumes:
+  db-data:
+
 services:
 
   docker_test_1:
@@ -9,6 +12,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db_1:3306/docker_test
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 7deRgdb0RAJnt85
+    depends_on:
+      - mysql_db_1
     networks:
       - app_network
 
@@ -17,10 +26,27 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db_1:3306/docker_test
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 7deRgdb0RAJnt85
+    depends_on:
+      - mysql_db_1
     networks:
       - app_network
 
-#  docker_test_3:
+  mysql_db_1:
+    image: mysql:8.0
+    container_name: mysql_db_1
+    environment:
+      MYSQL_ROOT_PASSWORD: 7deRgdb0RAJnt85
+      MYSQL_DATABASE: docker_test
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app_network
+
+  #  docker_test_3:
 #    container_name: docker_test_3
 #    build:
 #      context: .

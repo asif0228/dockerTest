@@ -2,9 +2,52 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Docker Test</title>
+    <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
 </head>
 <body>
-<h1>Hi</h1>
+    <h1>Users List</h1>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Created By</th>
+            <th>Modified</th>
+            <th>Modified By</th>
+        </tr>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.getId()}"></td>
+            <td th:text="${u.getName()}"></td>
+            <td th:text="${u.getUsername()}"></td>
+            <td th:text="${u.getPassword()}"></td>
+            <td th:text="${u.getUserRoleEnum().getValue()}"></td>
+            <td th:text="${u.getStatusEnum().getValue()}"></td>
+            <td th:text="${u.getCreated()}"></td>
+            <td th:text="${u.getCreatedBy()}"></td>
+            <td th:text="${u.getModified()}"></td>
+            <td th:text="${u.getModifiedBy()}"></td>
+        </tr>
+    </table>
 </body>
 </html>
