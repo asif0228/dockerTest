@@ -1,58 +1,13 @@
+x-common-variables: &common-variables
+  SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db_1:3306/docker_test
+  SPRING_DATASOURCE_USERNAME: root
+  SPRING_DATASOURCE_PASSWORD: 7deRgdb0RAJnt85
+
 networks:
   app_network:
     driver: bridge
 
-volumes:
-  db-data:
-
 services:
-
-  docker_test_1:
-    container_name: docker_test_1
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db_1:3306/docker_test
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 7deRgdb0RAJnt85
-    depends_on:
-      - mysql_db_1
-    networks:
-      - app_network
-
-  docker_test_2:
-    container_name: docker_test_2
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db_1:3306/docker_test
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 7deRgdb0RAJnt85
-    depends_on:
-      - mysql_db_1
-    networks:
-      - app_network
-
-  mysql_db_1:
-    image: mysql:8.0
-    container_name: mysql_db_1
-    environment:
-      MYSQL_ROOT_PASSWORD: 7deRgdb0RAJnt85
-      MYSQL_DATABASE: docker_test
-    volumes:
-      - db-data:/var/lib/mysql
-    networks:
-      - app_network
-
-  #  docker_test_3:
-#    container_name: docker_test_3
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    networks:
-#      - app_network
 
   haproxy:
     build:
@@ -66,6 +21,59 @@ services:
       - docker_test_2
     networks:
       - app_network
+
+  docker_test_1:
+    container_name: docker_test_1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment: *common-variables
+    depends_on:
+      mysql_db_1:
+        condition: service_healthy
+    networks:
+      - app_network
+
+  docker_test_2:
+    container_name: docker_test_2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment: *common-variables
+    depends_on:
+      mysql_db_1:
+        condition: service_healthy
+      - docker_test_1
+    networks:
+      - app_network
+
+#  docker_test_3:
+#    container_name: docker_test_3
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    environment: *common-variables
+#    depends_on:
+#      mysql_db_1:
+#        condition: service_healthy
+#    networks:
+#      - app_network
+
+  mysql_db_1:
+    image: mysql:8.0
+    container_name: mysql_db_1
+    environment:
+      MYSQL_ROOT_PASSWORD: 7deRgdb0RAJnt85
+      MYSQL_DATABASE: docker_test
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    networks:
+      - app_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p7deRgdb0RAJnt85" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   #ubuntu:
   #  image: ubuntu:latest
